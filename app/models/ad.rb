@@ -1,0 +1,3 @@
+class Ad < ApplicationRecord
+
+end

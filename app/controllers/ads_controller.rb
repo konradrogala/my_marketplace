@@ -3,7 +3,7 @@ class AdsController < ApplicationController
 
   # GET /ads or /ads.json
   def index
-    @ads = Ad.all
+    @ads = Ad.order(created_at: :desc)
   end
 
   # GET /ads/1 or /ads/1.json
@@ -63,6 +63,11 @@ class AdsController < ApplicationController
     @ad.destroy!
 
     respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.remove(@ad)
+        ]
+      end
       format.html { redirect_to ads_url, notice: "Ad was successfully destroyed." }
       format.json { head :no_content }
     end

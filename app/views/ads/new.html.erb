@@ -1,0 +1,12 @@
+<%= turbo_frame_tag "modal" do %>
+  <div class="modal" >
+    <h1> New Ad </h1>
+    <%= render "form", ad: @ad %>
+  </div>
+  <div>
+    <%= link_to "Cancel", "#", data: {
+      controller: "modals",
+      action: "modals#close"
+    } %>
+  </div>
+<% end %>

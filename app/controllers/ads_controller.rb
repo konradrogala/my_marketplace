@@ -73,14 +73,29 @@ class AdsController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_ad
-      @ad = Ad.find(params[:id])
-    end
+  def search
+    sanitized_param = ActiveRecord::Base.sanitize_sql_like(search_params[:title_search])
 
-    # Only allow a list of trusted parameters through.
-    def ad_params
-      params.require(:ad).permit(:title, :description)
+    @ads = Ad.where("title ILIKE ?", "%#{sanitized_param}%")
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.update("search_result", partial: "search_results", locals: { ads: @ads })
+      end
     end
+  end
+
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_ad
+    @ad = Ad.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def ad_params
+    params.require(:ad).permit(:title, :description)
+  end
+
+  def search_params
+    params.permit(:title_search)
+  end
 end

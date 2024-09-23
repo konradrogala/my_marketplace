@@ -4,6 +4,14 @@
 
 <h1>Ads</h1>
 
+<div>
+  <%= form_with url: search_ads_path, method: :post do |form| %>
+    <%= form.search_field :title_search, oninput: "this.form.requestSubmit()" %>
+  <% end %>
+</div>
+
+<div id="search_result">search results</div>
+
 <div id="new_ad">
   <%= render partial: 'form', locals: { ad: Ad.new } %>
 </div>
